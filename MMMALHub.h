@@ -177,6 +177,7 @@ namespace MMMAL {
       bool focusBusy_;
       MAL_MS_AFSTATUS afStatus_;
       bool afBusy_;
+      long afOffset_;
    };
 
 }

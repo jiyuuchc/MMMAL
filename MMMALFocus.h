@@ -20,6 +20,8 @@ namespace MMMAL
       static const char * const DeviceName_;
       static const char * const Description_;
       static const char * const Keyword_Position_;
+      static const char * const MMMALFocus::Keyword_NearLimit_;
+      static const char * const MMMALFocus::Keyword_FarLimit_;
 
       MMMALFocus();
       ~MMMALFocus();
@@ -41,6 +43,8 @@ namespace MMMAL
 
       // action interface
       int OnPosition(MM::PropertyBase* pProp, MM::ActionType eAct);
+      int OnNearLimit(MM::PropertyBase* pProp, MM::ActionType eAct);
+      int OnFarLimit(MM::PropertyBase* pProp, MM::ActionType eAct);
       // int OnJogsensitivity(MM::PropertyBase* pProp, MM::ActionType eAct);
 
       int IsStageSequenceable(bool& seq) const;

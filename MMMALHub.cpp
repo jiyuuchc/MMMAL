@@ -37,6 +37,7 @@ namespace MMMAL {
                focusBusy_(false),
                afBusy_(false),
                afStatus_(MAL_MS_AF_OFF),
+               afOffset_(0),
                autofocusDev_(NULL),
                focusDev_(NULL),
                lightPathDev_(NULL),
@@ -120,7 +121,14 @@ namespace MMMAL {
          ss << src << " - error: " << errorcode;
       }
 
-      LogMessage(ss.str(), false);
+      if (IsCallbackRegistered())
+      {
+         LogMessage(ss.str(), false);
+      }
+      else
+      {
+         std::cout << ss << std::endl;
+      }
    }
 
    void MMMALHub::GetName(char * pszName) const
@@ -900,7 +908,7 @@ namespace MMMAL {
          return TranslateMalError(malResult);
       }
 
-      if ((malResult = malSetObservation(pMAL_, 0, MAL_MS_OBS_FL_DIC)) != MAL_OK) // needed for autofocus
+      if ((malResult = malSetObservation(pMAL_, 0, MAL_MS_OBS_DIC_DIA)) != MAL_OK) // needed for autofocus
       {      
          return TranslateMalError(malResult);
       }
@@ -1051,7 +1059,11 @@ namespace MMMAL {
    {
       MALRESULT malResult;
 
-      malSetAFSearchCenterPosition(pMAL_, GetFocusPosition());
+      malResult = malSetAFSearchCenterPosition(pMAL_, GetFocusPosition());
+      if (malResult != MAL_OK)
+      {
+         return TranslateMalError(malResult);
+      }
 
       malResult = malSetAFStatus(pMAL_, 1, status);
       if (malResult != MAL_OK)
@@ -1084,9 +1096,11 @@ namespace MMMAL {
 
       malResult = malSetOffsetLensOffsetDistance(
             pMAL_,
-            (MAL_MS_REVOLVERPOSITION)(nosepiecePosition_+MAL_MS_REVOLVERPOS0),
+            (MAL_MS_REVOLVERPOSITION)(nosepiecePosition_ + MAL_MS_REVOLVERPOS0),
             offset
       );
+
+      afOffset_ = offset;
 
       return TranslateMalError(malResult);
    }
@@ -1232,7 +1246,7 @@ namespace MMMAL {
          }
       } 
 
-      if (wParam == MAL_IX_EVT_NOTICE_SWITCHON || wParam == MAL_IX_EVT_NOTICE_SWITCHOFF)
+      if (wParam == MAL_IX_EVT_NOTICE_SWITCHON)
       {
          ULONG min, max;
          if (msg == ME_MS_NOTICE_OK)
@@ -1240,8 +1254,12 @@ namespace MMMAL {
             switch (lParam)
             {
             case 0:
-               malSetPrismStatus(pMAL_, 1, wParam == MAL_IX_EVT_NOTICE_SWITCHON ? MAL_BI : MAL_SIDE);
-               Sleep(1);
+               if (! prismBusy_ )
+               {
+                  prismBusy_ = true;
+                  malSetPrismStatus(pMAL_, 1, lightPathState_ % 2 == 0 ? MAL_BI : MAL_SIDE);
+                  Sleep(1);
+               }
                break;
             case 2:
                if (! GetAutofocusBusy())
@@ -1251,19 +1269,20 @@ namespace MMMAL {
                break;
             case 1:
                SwitchLampVoltage();
+               break;
             case 3:
                GetLampVoltageRange(&min, &max);
-               if (lampVoltage_ + 200 <= max)
+               if (lampVoltage_ + 500 <= max) //Fixme handle continous press
                {
-                  SetLampVoltage(lampVoltage_ + 200);
+                  SetLampVoltage(lampVoltage_ + 500);
                   Sleep(1);
                }
                break;
             case 4:
                GetLampVoltageRange(&min, &max);
-               if (lampVoltage_ - 200 >= min)
+               if (lampVoltage_ - 500 >= min)
                {
-                  SetLampVoltage(lampVoltage_ - 100);
+                  SetLampVoltage(lampVoltage_ - 500);
                   Sleep(1);
                }
                break;
@@ -1272,16 +1291,14 @@ namespace MMMAL {
                malSetJogStepSize(pMAL_, MAL_MS_JOG1, fineJogStep_ ? -1 : -2);
                break;
             case 11:
-               if (wParam == MAL_IX_EVT_NOTICE_SWITCHON)
-               {
-                  EscapeNosepiece();
-               }
+               EscapeNosepiece();
                break;
             case 24:
                SetShutterState(MICROSCOPE_DIA1, ! IsShutterOpen(MICROSCOPE_DIA1));
                break;
             case 25:
                SetShutterState(MICROSCOPE_EPI1, ! IsShutterOpen(MICROSCOPE_EPI1));
+               break;
             default:
                break;
             }

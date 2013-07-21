@@ -11,9 +11,9 @@ namespace MMMAL
 {
    const char * const MMMALAutofocus::DeviceName_ = "IXZDC";
    const char * const MMMALAutofocus::Description_ = "Olympus IX Auto Focus";
-   const char * const MMMALAutofocus::Keyword_AFSearchRange_ = "AF Search Range";
-   const char * const MMMALAutofocus::Keyword_AFOffset_ = "AF Offset";
-   const char * const MMMALAutofocus::Keyword_AFStatus_ = "AF Status";
+   const char * const MMMALAutofocus::Keyword_AFSearchRange_ = "Search Range";
+   const char * const MMMALAutofocus::Keyword_AFOffset_ = "Offset";
+   const char * const MMMALAutofocus::Keyword_AFStatus_ = "Status";
    const char * const MMMALAutofocus::Keyword_ContinuousFocus_ ="Continuous Focus";
 
    MMMALAutofocus::MMMALAutofocus() : initialized_(false), hub_(NULL), continuousFocusing_(false)
@@ -263,6 +263,29 @@ namespace MMMAL
       return ret;
    }
 
+   
+   int MMMALAutofocus::AFOffsetChanged()
+   {
+      int ret = DEVICE_OK;
+
+      if (IsCallbackRegistered())
+      {
+         long offset;
+         if (hub_->GetAFOffset(& offset) == DEVICE_OK)
+         {
+            ret = GetCoreCallback()->OnPropertyChanged(this, Keyword_AFOffset_, CDeviceUtils::ConvertToString(offset));
+         }
+      }
+      else 
+      {
+         long offset;
+         hub_->GetAFOffset(& offset);
+         std::cout << "Focus offset " << offset << std::endl;
+      }
+
+      return ret;
+   }
+
    int MMMALAutofocus::OnContinuousFocus(MM::PropertyBase* pProp, MM::ActionType eAct)
    {
       int ret = DEVICE_OK;
@@ -343,5 +366,4 @@ namespace MMMAL
 
       return ret;
    }
-
 }

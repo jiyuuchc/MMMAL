@@ -13,6 +13,8 @@ namespace MMMAL
    const char * const MMMALFocus::DeviceName_ = "IXFocus";
    const char * const MMMALFocus::Description_ = "Olympus IX Focus";
    const char * const MMMALFocus::Keyword_Position_ = "Position";
+   const char * const MMMALFocus::Keyword_NearLimit_ = "Near Limit";
+   const char * const MMMALFocus::Keyword_FarLimit_ = "Far Limit";
 
    MMMALFocus::MMMALFocus() : initialized_(false), stepSize_(0.001), origin_(0), hub_(NULL)
    {
@@ -77,6 +79,20 @@ namespace MMMAL
 
       pAct = new CPropertyAction (this, &MMMALFocus::OnPosition);
       ret = CreateProperty(Keyword_Position_, CDeviceUtils::ConvertToString(curPos), MM::Float, false, pAct);
+      if (ret != DEVICE_OK)
+      {
+         return ret;
+      }
+
+      pAct = new CPropertyAction (this, &MMMALFocus::OnNearLimit);
+      ret = CreateProperty(Keyword_NearLimit_, CDeviceUtils::ConvertToString(curPos), MM::Float, false, pAct);
+      if (ret != DEVICE_OK)
+      {
+         return ret;
+      }
+
+      pAct = new CPropertyAction (this, &MMMALFocus::OnFarLimit);
+      ret = CreateProperty(Keyword_FarLimit_, CDeviceUtils::ConvertToString(curPos), MM::Float, false, pAct);
       if (ret != DEVICE_OK)
       {
          return ret;
@@ -173,6 +189,55 @@ namespace MMMAL
       {
          pProp->Get(positionUm);
          ret = SetPositionUm(positionUm);
+      }
+
+      return ret;
+   }
+
+
+   int MMMALFocus::OnNearLimit(MM::PropertyBase* pProp, MM::ActionType eAct)
+   {
+      int ret = DEVICE_OK;
+      double nLimit, fLimit;
+      GetLimits(fLimit, nLimit);
+
+      if (eAct == MM::BeforeGet)
+      {
+         pProp->Set(nLimit);
+      }
+      else if (eAct == MM::AfterSet)
+      {
+         LONGLONG llNLimit, llFLimit;
+         pProp->Get(nLimit);
+         
+         llNLimit = (LONGLONG)((nLimit / stepSize_ + origin_) * 1000);
+         llFLimit = (LONGLONG)((fLimit / stepSize_ + origin_) * 1000);
+
+         ret = hub_->SetFocusLimits(llNLimit,llFLimit);
+      }
+
+      return ret;
+   }
+
+   int MMMALFocus::OnFarLimit(MM::PropertyBase* pProp, MM::ActionType eAct)
+   {
+      int ret = DEVICE_OK;
+      double nLimit, fLimit;
+      GetLimits(fLimit, nLimit);
+
+      if (eAct == MM::BeforeGet)
+      {
+         pProp->Set(fLimit);
+      }
+      else if (eAct == MM::AfterSet)
+      {
+         LONGLONG llNLimit, llFLimit;
+         pProp->Get(fLimit);
+         
+         llNLimit = (LONGLONG)((nLimit / stepSize_ + origin_) * 1000);
+         llFLimit = (LONGLONG)((fLimit / stepSize_ + origin_) * 1000);
+
+         ret = hub_->SetFocusLimits(llNLimit,llFLimit);
       }
 
       return ret;

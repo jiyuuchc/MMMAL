@@ -47,6 +47,7 @@ namespace MMMAL
       virtual int SetOffset(double offset);
 
       virtual int AFStatusChanged();
+      virtual int AFOffsetChanged();
 
    protected:
       int OnContinuousFocus(MM::PropertyBase* pProp, MM::ActionType eAct);
