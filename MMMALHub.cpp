@@ -1272,7 +1272,10 @@ namespace MMMAL {
                malSetJogStepSize(pMAL_, MAL_MS_JOG1, fineJogStep_ ? -1 : -2);
                break;
             case 11:
-               EscapeNosepiece();
+               if (wParam == MAL_IX_EVT_NOTICE_SWITCHON)
+               {
+                  EscapeNosepiece();
+               }
                break;
             case 24:
                SetShutterState(MICROSCOPE_DIA1, ! IsShutterOpen(MICROSCOPE_DIA1));
