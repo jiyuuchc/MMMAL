@@ -214,7 +214,7 @@ namespace MMMAL
       hub_->GetAFSearchRange(&range);
       if (range == 0) 
       {
-         hub_->SetAFSearchRange((LONGLONG)10 * (LONGLONG)1000000);
+         hub_->SetAFSearchRange((LONGLONG)30 * (LONGLONG)1000000);
       }
 
       return DEVICE_OK;
