@@ -103,7 +103,7 @@ namespace MMMAL
 
          assert((unsigned long) pos <= GetNumberOfPositions() && pos > 0);
 
-         ret = hub_->SetNosepiecePostion((int)pos);
+         ret = hub_->SetLightPathPosition((int)pos);
 
       }
 
