@@ -302,7 +302,7 @@ namespace MMMAL {
 
    int MMMALHub::RegisterButtonNotices(MAL_STATUS status)
    {
-      static long buttonList[] = {0, 1, 2, 3, 4, 9, 11, 24, 25};
+      static long buttonList[] = {0, 1, 2, 3, 4, 8, 9, 10, 11, 24, 25};
 
       for (long i = 0; i < sizeof(buttonList)/sizeof(long) ; i ++)
       {
@@ -1311,6 +1311,28 @@ namespace MMMAL {
                break;
             case 24:
                SetShutterState(MICROSCOPE_EPI1, ! IsShutterOpen(MICROSCOPE_EPI1));
+               break;
+            case 8:
+               if (! cubeBusy_)
+               {
+                  int pos = GetMirrorUnitPosition() - 1;
+                  if (pos == 0) 
+                  {
+                     pos = (int)(GetMirrorUnitNPositions());
+                  }
+                  SetMirrorUnitPosition(pos);
+               }
+               break;
+            case 10:
+               if (! cubeBusy_)
+               {
+                  int pos = GetMirrorUnitPosition() + 1;
+                  if (pos == (int)(GetMirrorUnitNPositions()))
+                  {
+                     pos = 1;
+                  }
+                  SetMirrorUnitPosition(pos);
+               }
                break;
             default:
                break;
