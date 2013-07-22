@@ -498,24 +498,37 @@ namespace MMMAL {
    int MMMALHub::EscapeNosepiece()
    {
       MALRESULT malResult = MAL_OK;
-      UpdateNosepieceState();
+
+      if (GetAFStatus() != MAL_MS_AF_OFF)
+      {
+         return DEVICE_OK;
+      }
 
       if ((malResult = malStopMovingSample(pMAL_, 0, AXIS_Z)) != MAL_OK)
       {
          return TranslateMalError(malResult);
       }
 
+      UpdateNosepieceState();
+      
       if (escapePos_[nosepiecePosition_ - 1] == 0)
       { // escape
-         escapePos_[nosepiecePosition_ - 1] = focusPos_;
-         malResult = malSetSamplePosition(pMAL_,1, AXIS_Z, 10000);
-         Sleep(1);
+         if (GetFocusPosition() > 20000)
+         {
+            escapePos_[nosepiecePosition_ - 1] = GetFocusPosition();
+            malResult = malSetSamplePosition(pMAL_,1, AXIS_Z, 10000);
+            Sleep(1);
+         }
       }
       else
       { // recover
-         malResult = malSetSamplePosition(pMAL_, 1, AXIS_Z,escapePos_[nosepiecePosition_ - 1]);
-         escapePos_[nosepiecePosition_ - 1] = 0;
-         Sleep(1);
+         //UpdateSamplePosition();
+         if (GetFocusPosition() < 20000)
+         {
+            malResult = malSetSamplePosition(pMAL_, 1, AXIS_Z,escapePos_[nosepiecePosition_ - 1]);
+            escapePos_[nosepiecePosition_ - 1] = 0;
+            Sleep(1);
+         }
       }
 
       return TranslateMalError(malResult);
