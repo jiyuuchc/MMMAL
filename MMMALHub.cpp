@@ -706,7 +706,7 @@ namespace MMMAL {
       return nosepieceBusy_;
    }
 
-   int MMMALHub::SetNosepiecePostion(int pos)
+   int MMMALHub::SetNosepiecePosition(int pos)
    {
       MALRESULT malResult;
 

@@ -76,7 +76,7 @@ namespace MMMAL {
       int UpdateNosepieceState();
       int GetNosepiecePosition() const;
       bool GetNosepieceBusy() const;
-      int SetNosepiecePostion(int pos);
+      int SetNosepiecePosition(int pos);
 
       //lightpath
       long GetLightPathNPositions() const;
