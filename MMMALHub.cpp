@@ -579,7 +579,7 @@ namespace MMMAL {
 
       if (channel == MICROSCOPE_DIA1 || channel == MICROSCOPE_EPI1)
       {
-         MALRESULT malResult = malSetShutterStatus(pMAL_, 1, channel, status); //FIXME synchronous call
+         MALRESULT malResult = malSetShutterStatus(pMAL_, 0, channel, status); //FIXME synchronous call
 
          if (malResult != MAL_OK)
          {
