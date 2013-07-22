@@ -20,8 +20,8 @@ namespace MMMAL
       static const char * const DeviceName_;
       static const char * const Description_;
       static const char * const Keyword_Position_;
-      static const char * const MMMALFocus::Keyword_NearLimit_;
-      static const char * const MMMALFocus::Keyword_FarLimit_;
+      static const char * const Keyword_NearLimit_;
+      static const char * const Keyword_FarLimit_;
 
       MMMALFocus();
       ~MMMALFocus();
