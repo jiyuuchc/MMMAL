@@ -32,6 +32,7 @@ namespace MMMAL
 
       // action interface
       int OnState(MM::PropertyBase* pProp, MM::ActionType eAct);
+      int StateChanged();
 
    private:
       bool initialized_;

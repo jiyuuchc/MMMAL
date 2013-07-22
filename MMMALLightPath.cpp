@@ -76,6 +76,9 @@ namespace MMMAL
       }
 
       SetPropertyLimits(MM::g_Keyword_State, 1, GetNumberOfPositions());
+      
+      pAct = new CPropertyAction (this, &MMMALLightPath::OnLabel);
+      ret = CreateProperty(MM::g_Keyword_Label, "", MM::String, false, pAct);
 
       SetPositionLabel(1L, "Eyepiece");
       SetPositionLabel(2L, "Camera");
@@ -117,8 +120,12 @@ namespace MMMAL
       if (IsCallbackRegistered())
       {
          int state = hub_->GetLightPathState();
-
+         
          ret = GetCoreCallback()->OnPropertyChanged(this, MM::g_Keyword_State, CDeviceUtils::ConvertToString(state));
+
+         char buf[MM::MaxStrLength];
+         GetPositionLabel(state, buf);
+         ret = GetCoreCallback()->OnPropertyChanged(this, MM::g_Keyword_Label, buf);
          //std::clog << "Lightpath state changed " << state << std::endl;
       }
 

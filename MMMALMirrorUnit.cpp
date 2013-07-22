@@ -76,8 +76,11 @@ namespace MMMAL
       {
          return ret;
       }
-
+      
       SetPropertyLimits(MM::g_Keyword_State, 1, GetNumberOfPositions());
+      
+      pAct = new CPropertyAction (this, &MMMALMirrorUnit::OnLabel);
+      ret = CreateProperty(MM::g_Keyword_Label, "", MM::String, false, pAct);
 
       for (unsigned i = 1; i <= GetNumberOfPositions(); i++)
       {
@@ -123,5 +126,24 @@ namespace MMMAL
       return DEVICE_OK;
    }
 
+   
+   int MMMALMirrorUnit::StateChanged()
+   {
+      int ret = DEVICE_OK;
+
+      if (IsCallbackRegistered())
+      {
+         int pos = hub_->GetMirrorUnitPosition();
+         
+         ret = GetCoreCallback()->OnPropertyChanged(this, MM::g_Keyword_State, CDeviceUtils::ConvertToString(pos));
+
+         char buf[MM::MaxStrLength];
+         GetPositionLabel(pos, buf);
+         ret = GetCoreCallback()->OnPropertyChanged(this, MM::g_Keyword_Label, buf);
+         //std::clog << "Lightpath state changed " << state << std::endl;
+      }
+
+      return ret;
+   }
 }
 
