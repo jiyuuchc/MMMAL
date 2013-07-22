@@ -12,6 +12,7 @@
 #include "MMMALNosepiece.h"
 #include "MMMALFocus.h"
 #include "MMMALAutofocus.h"
+#include "MMMALLamp.h"
 #include "MMDeviceConstants.h"
 
 using namespace MMMAL;
@@ -44,6 +45,7 @@ MODULE_API void InitializeModuleData()
    AddAvailableDeviceName(MMMALNosepiece::DeviceName_, MMMALNosepiece::Description_);
    AddAvailableDeviceName(MMMALFocus::DeviceName_, MMMALFocus::Description_);
    AddAvailableDeviceName(MMMALAutofocus::DeviceName_, MMMALAutofocus::Description_);
+   AddAvailableDeviceName(MMMALLamp::DeviceName_, MMMALLamp::Description_);
 
    // AddAvailableDeviceName(g_IX71Lamp, "IX71 Halogen Lamp");
 }
@@ -88,6 +90,11 @@ MODULE_API MM::Device* CreateDevice(const char* deviceName)
    if (strcmp(deviceName, MMMALAutofocus::DeviceName_) == 0)
    {
       return new MMMALAutofocus();
+   }
+
+   if (strcmp(deviceName, MMMALLamp::DeviceName_) == 0)
+   {
+      return new MMMALLamp();
    }
 
    return NULL;
