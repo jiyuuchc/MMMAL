@@ -1293,10 +1293,10 @@ namespace MMMAL {
             case 11:
                EscapeNosepiece();
                break;
-            case 24:
+            case 25:
                SetShutterState(MICROSCOPE_DIA1, ! IsShutterOpen(MICROSCOPE_DIA1));
                break;
-            case 25:
+            case 24:
                SetShutterState(MICROSCOPE_EPI1, ! IsShutterOpen(MICROSCOPE_EPI1));
                break;
             default:
