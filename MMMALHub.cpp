@@ -937,6 +937,12 @@ namespace MMMAL {
          {
             return TranslateMalError(malResult);
          }
+
+         result = SetAFSearchRange(30000000L);
+         if (result != DEVICE_OK)
+         {
+            return result;
+         }
       }
 
       focusPos_ = -1;
