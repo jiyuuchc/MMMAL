@@ -95,7 +95,7 @@ namespace MMMAL
       {
          long voltage;
          pProp->Get(voltage);
-         hub_->SetLampVoltage((ULONG) voltage);
+         hub_->SetLampVoltage((ULONG) voltage, true);
       }
 
       return ret;

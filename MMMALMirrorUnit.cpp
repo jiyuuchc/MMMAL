@@ -120,7 +120,7 @@ namespace MMMAL
 
          assert((unsigned long) pos <= GetNumberOfPositions() && pos > 0);
 
-         return hub_->SetMirrorUnitPosition((int)pos);
+         return hub_->SetMirrorUnitPosition((int)pos, true);
       }
 
       return DEVICE_OK;

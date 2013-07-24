@@ -649,7 +649,14 @@ namespace MMMAL {
          return TranslateMalError(malResult);
       }
 
-      cubePosition_ = (int)(pos - MAL_MS_CUBEPOS0);
+      if ((int)(pos - MAL_MS_CUBEPOS0) != cubePosition_)
+      {
+         cubePosition_ = (int)(pos - MAL_MS_CUBEPOS0);
+         if (mirrorUnitDev_ != NULL)
+         {
+            mirrorUnitDev_->StateChanged();
+         }
+      }
 
       return DEVICE_OK;
    }
@@ -659,7 +666,7 @@ namespace MMMAL {
       return cubePosition_;
    }
 
-   int MMMALHub::SetMirrorUnitPosition(int pos)
+   int MMMALHub::SetMirrorUnitPosition(int pos, bool updateNow)
    {
       MALRESULT malResult;
 
@@ -670,7 +677,11 @@ namespace MMMAL {
       }
 
       cubeBusy_ = true;
-      cubePosition_ = pos;
+      if (updateNow)
+      {
+         cubePosition_ = pos;
+      }
+
       return DEVICE_OK;
    }
 
@@ -694,7 +705,14 @@ namespace MMMAL {
          return TranslateMalError(malResult);
       }
 
-      nosepiecePosition_= pos - MAL_MS_REVOLVERPOS0;
+      if (nosepiecePosition_ != pos - MAL_MS_REVOLVERPOS0)
+      {
+         nosepiecePosition_= pos - MAL_MS_REVOLVERPOS0;
+         if (nosepieceDev_ != NULL)
+         {
+            nosepieceDev_->StateChanged();
+         }
+      }
 
       return DEVICE_OK;
    }
@@ -709,7 +727,7 @@ namespace MMMAL {
       return nosepieceBusy_;
    }
 
-   int MMMALHub::SetNosepiecePosition(int pos)
+   int MMMALHub::SetNosepiecePosition(int pos, bool updateNow)
    {
       MALRESULT malResult;
 
@@ -721,7 +739,10 @@ namespace MMMAL {
       }
 
       nosepieceBusy_ = true;
-      nosepiecePosition_ = pos;
+      if (updateNow)
+      {
+         nosepiecePosition_ = pos;
+      }
 
       return DEVICE_OK;
    }
@@ -787,7 +808,7 @@ namespace MMMAL {
       return bottomPortBusy_ || prismBusy_;
    }
 
-   int MMMALHub::SetLightPathState(int pos)
+   int MMMALHub::SetLightPathState(int pos, bool updateNow)
    {
       MALRESULT malResult;
 
@@ -811,7 +832,10 @@ namespace MMMAL {
          prismBusy_ = true;
       }
 
-      lightPathState_ = pos;
+      if (updateNow)
+      {
+         lightPathState_ = pos;
+      }
 
       return DEVICE_OK;
    }
@@ -859,10 +883,13 @@ namespace MMMAL {
       return DEVICE_OK;
    }
 
-   int MMMALHub::SetLampVoltage(ULONG voltage)
+   int MMMALHub::SetLampVoltage(ULONG voltage, bool updateNow)
    {
       MALRESULT malResult = malSetLampVoltage(pMAL_, 1, MICROSCOPE_DIA1, voltage);
-      lampVoltage_ = voltage;
+      if (updateNow)
+      {
+         lampVoltage_ = voltage;
+      }
       lampBusy_ = true;
       return TranslateMalError(malResult);
    }
@@ -981,7 +1008,7 @@ namespace MMMAL {
       return TranslateMalError(malResult);
    }
 
-   int MMMALHub::SetFocusPosition(LONGLONG pos)
+   int MMMALHub::SetFocusPosition(LONGLONG pos, bool updateNow)
    {
       MALRESULT malResult;
 
@@ -993,7 +1020,10 @@ namespace MMMAL {
       }
 
       focusBusy_ = true;
-      focusPos_ = pos;
+      if (updateNow)
+      {
+         focusPos_ = pos;
+      }
 
       return DEVICE_OK;
    }

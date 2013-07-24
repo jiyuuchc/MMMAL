@@ -124,7 +124,7 @@ namespace MMMAL
    {
       LONGLONG posPm = (LONGLONG)steps * 1000;
 
-      return hub_->SetFocusPosition(posPm);
+      return hub_->SetFocusPosition(posPm, true);
    }
 
    int MMMALFocus::GetPositionSteps(long& steps)

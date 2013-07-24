@@ -68,7 +68,7 @@ namespace MMMAL {
       long GetMirrorUnitNPositions() const;
       int UpdateMirrorUnitState();
       int GetMirrorUnitPosition() const;
-      int SetMirrorUnitPosition(int pos);
+      int SetMirrorUnitPosition(int pos, bool updateNow = false);
       bool IsMirrorUnitBusy() const;
 
       //nosepiece
@@ -76,20 +76,20 @@ namespace MMMAL {
       int UpdateNosepieceState();
       int GetNosepiecePosition() const;
       bool IsNosepieceBusy() const;
-      int SetNosepiecePosition(int pos);
+      int SetNosepiecePosition(int pos, bool updateNow = false);
 
       //lightpath
       long GetLightPathNPositions() const;
       int UpdateLightPathState();
       int GetLightPathState() const;
       bool IsLightPathBusy() const;
-      int SetLightPathState(int pos);
+      int SetLightPathState(int state, bool updateNow = false);
       bool HasBottomPort() const;
 
       //Lamp
       ULONG GetLampVoltage() const;
       int UpdateLampState();
-      int SetLampVoltage(ULONG voltage);
+      int SetLampVoltage(ULONG voltage, bool updateNow = false);
       bool IsLampBusy() const;
       int GetLampVoltageRange(ULONG* min, ULONG* max);
       int SwitchLampOnOff();
@@ -100,7 +100,7 @@ namespace MMMAL {
       int InitializeFocus();
       LONGLONG GetFocusPosition();
       int UpdateFocusPosition();
-      int SetFocusPosition(LONGLONG pos);
+      int SetFocusPosition(LONGLONG pos, bool updateNow = false);
       bool IsFocusBusy() const;
       int GetFocusLimits(LONGLONG* nearLimit, LONGLONG *farLimit);
       int SetFocusLimits(LONGLONG nearLimit, LONGLONG farLimit);
