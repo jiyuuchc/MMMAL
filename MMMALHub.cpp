@@ -50,7 +50,6 @@ namespace MMMAL {
       InitializeDefaultErrorMessages();
 
       memset(configuration_, 0, sizeof(configuration_));
-      memset(escapePos_, 0, sizeof(escapePos_));
 
       CreateProperty(MM::g_Keyword_Name, DeviceName_, MM::String, true);
       CreateProperty(MM::g_Keyword_Description, Description_, MM::String, true);
@@ -498,6 +497,9 @@ namespace MMMAL {
    int MMMALHub::EscapeNosepiece()
    {
       MALRESULT malResult = MAL_OK;
+      int ret = DEVICE_OK;
+      static LONGLONG savedPos = -1L;
+      static LONGLONG escapedPos = -1L;
 
       if (GetAFStatus() != MAL_MS_AF_OFF)
       {
@@ -509,29 +511,30 @@ namespace MMMAL {
          return TranslateMalError(malResult);
       }
 
-      UpdateNosepieceState();
-      
-      if (escapePos_[nosepiecePosition_ - 1] == 0)
-      { // escape
-         if (GetFocusPosition() > 20000)
-         {
-            escapePos_[nosepiecePosition_ - 1] = GetFocusPosition();
-            malResult = malSetSamplePosition(pMAL_,1, AXIS_Z, 10000);
-            Sleep(1);
-         }
-      }
-      else
+      if (focusPos_ <= escapedPos + 10000000 && savedPos > 0)
       { // recover
          //UpdateSamplePosition();
-         if (GetFocusPosition() < 20000)
+         ret = SetFocusPosition(savedPos);
+         savedPos = -1;
+         Sleep(1);
+      }
+      else
+      { // escape
+         savedPos = focusPos_;
+         malResult = malSetSamplePosition(pMAL_, 0, AXIS_Z, 0); 
+         if (malResult == MAL_OK)
          {
-            malResult = malSetSamplePosition(pMAL_, 1, AXIS_Z,escapePos_[nosepiecePosition_ - 1]);
-            escapePos_[nosepiecePosition_ - 1] = 0;
-            Sleep(1);
+            UpdateFocusPosition();
+            escapedPos = focusPos_; 
+         }
+         else
+         {
+            savedPos = -1;
+            ret = TranslateMalError(malResult);
          }
       }
 
-      return TranslateMalError(malResult);
+      return ret;
    }
 
    void * MMMALHub::GetMALObject() const

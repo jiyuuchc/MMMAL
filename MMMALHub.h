@@ -116,7 +116,6 @@ namespace MMMAL {
       int SwitchAF();
 
    protected:
-      LONGLONG escapePos_[8];
       bool fineJogStep_;
       int CreateMALObject();
       int InitMALObject();
