@@ -20,11 +20,11 @@ namespace MMMAL {
 
    const char * const MMMALHub::DeviceName_ = "IXHub";
    const char * const MMMALHub::Description_ = "Olympus IX microscope hub";
-   const char * const MMMALHub::Keyword_Frame_Version_ = "Frame Version";
-   const char * const MMMALHub::Keyword_Focus_Version_ = "Focus Version";
-   const char * const MMMALHub::Keyword_UCB_Version_ = "UCB Version";
-   const char * const MMMALHub::Keyword_Config_Path = "INI File";
-   const char * const MMMALHub::Keyword_ZDC_Config_Path = "ZDC INI File";
+   const char * const MMMALHub::Keyword_Frame_Version_ = "Firmware(Frame)";
+   const char * const MMMALHub::Keyword_Focus_Version_ = "Firmware(Focus)";
+   const char * const MMMALHub::Keyword_UCB_Version_ = "Firmware(UCB)";
+   const char * const MMMALHub::Keyword_Config_Path = "Config Path";
+   const char * const MMMALHub::Keyword_ZDC_Config_Path = "Config Path ZDC";
 
    MMMALHub::MMMALHub():
                initialized_(false),
