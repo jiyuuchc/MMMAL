@@ -44,7 +44,7 @@ namespace MMMAL
 
    bool MMMALMirrorUnit::Busy()
    {
-      return hub_->GetMirrorUnitBusy();
+      return hub_->IsMirrorUnitBusy();
    }
 
 

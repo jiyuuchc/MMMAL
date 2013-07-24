@@ -40,7 +40,7 @@ namespace MMMAL
 
    bool MMMALLightPath::Busy()
    {
-      return hub_->GetLightPathBusy();
+      return hub_->IsLightPathBusy();
    }
 
    unsigned long MMMALLightPath::GetNumberOfPositions() const
@@ -106,7 +106,7 @@ namespace MMMAL
 
          assert((unsigned long) pos <= GetNumberOfPositions() && pos > 0);
 
-         ret = hub_->SetLightPathPosition((int)pos);
+         ret = hub_->SetLightPathState((int)pos);
 
       }
 

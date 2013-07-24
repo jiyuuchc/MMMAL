@@ -38,7 +38,7 @@ namespace MMMAL
 
    bool MMMALNosepiece::Busy()
    {
-      return hub_->GetNosepieceBusy();
+      return hub_->IsNosepieceBusy();
    }
 
    unsigned long MMMALNosepiece::GetNumberOfPositions() const

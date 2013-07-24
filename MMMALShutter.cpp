@@ -68,7 +68,7 @@ namespace MMMAL
 
    bool MMMALShutter::Busy()
    {
-      return hub_->GetShutterBusy(channel_);
+      return hub_->IsShutterBusy(channel_);
    }
 
    int MMMALShutter::SetOpen(bool open)

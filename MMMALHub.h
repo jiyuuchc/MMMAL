@@ -62,37 +62,37 @@ namespace MMMAL {
       int UpdateShutterState();
       int SetShutterState(MAL_IOTARGET channel, bool bOpen);
       bool IsShutterOpen(MAL_IOTARGET channel) const;
-      bool GetShutterBusy(MAL_IOTARGET channel);
+      bool IsShutterBusy(MAL_IOTARGET channel);
 
       // mirro unit
       long GetMirrorUnitNPositions() const;
       int UpdateMirrorUnitState();
       int GetMirrorUnitPosition() const;
       int SetMirrorUnitPosition(int pos);
-      bool GetMirrorUnitBusy() const;
+      bool IsMirrorUnitBusy() const;
 
       //nosepiece
       long GetNosepieceNPositions() const;
       int UpdateNosepieceState();
       int GetNosepiecePosition() const;
-      bool GetNosepieceBusy() const;
+      bool IsNosepieceBusy() const;
       int SetNosepiecePosition(int pos);
 
       //lightpath
       long GetLightPathNPositions() const;
       int UpdateLightPathState();
       int GetLightPathState() const;
-      bool GetLightPathBusy() const;
-      int SetLightPathPosition(int pos);
+      bool IsLightPathBusy() const;
+      int SetLightPathState(int pos);
       bool HasBottomPort() const;
 
       //Lamp
       ULONG GetLampVoltage() const;
       int UpdateLampState();
       int SetLampVoltage(ULONG voltage);
-      bool GetLampBusy() const;
+      bool IsLampBusy() const;
       int GetLampVoltageRange(ULONG* min, ULONG* max);
-      int SwitchLampVoltage();
+      int SwitchLampOnOff();
 
       //focus
       bool HasZDC() const;
@@ -101,11 +101,11 @@ namespace MMMAL {
       LONGLONG GetFocusPosition();
       int UpdateFocusPosition();
       int SetFocusPosition(LONGLONG pos);
-      bool GetFocusDriverBusy() const;
+      bool IsFocusBusy() const;
       int GetFocusLimits(LONGLONG* nearLimit, LONGLONG *farLimit);
       int SetFocusLimits(LONGLONG nearLimit, LONGLONG farLimit);
       
-      bool GetAutofocusBusy() const;
+      bool IsAFBusy() const;
       MAL_MS_AFSTATUS GetAFStatus() const;
       int SetAFStatus(MAL_MS_AFSTATUS status);
       int GetAFOffset(long *offset) const;
@@ -132,7 +132,6 @@ namespace MMMAL {
    private:
       void LogError(std::string src, long errorcode, void* pv) const;
       int GetConfigFilePath(char* path, size_t len = MM::MaxStrLength);
-      MMMALAutofocus* GetAFDevice();
 
       void * pMAL_;
       bool initialized_;

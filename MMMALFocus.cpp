@@ -41,7 +41,7 @@ namespace MMMAL
 
    bool MMMALFocus::Busy()
    {
-      return hub_->GetFocusDriverBusy();
+      return hub_->IsFocusBusy();
    }
 
    int MMMALFocus::Shutdown()

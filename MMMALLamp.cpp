@@ -79,7 +79,7 @@ namespace MMMAL
 
    bool MMMALLamp::Busy()
    {
-      return hub_->GetLampBusy();
+      return hub_->IsLampBusy();
    }
 
    int MMMALLamp::OnVoltage(MM::PropertyBase* pProp, MM::ActionType eAct)

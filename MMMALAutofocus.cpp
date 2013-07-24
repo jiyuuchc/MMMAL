@@ -36,7 +36,7 @@ namespace MMMAL
 
    bool MMMALAutofocus::Busy()
    {
-      return hub_->GetAutofocusBusy();
+      return hub_->IsAFBusy();
    }
 
    int MMMALAutofocus::Shutdown()

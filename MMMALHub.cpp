@@ -617,7 +617,7 @@ namespace MMMAL {
       }
    }
 
-   bool MMMALHub::GetShutterBusy(MAL_IOTARGET channel)
+   bool MMMALHub::IsShutterBusy(MAL_IOTARGET channel)
    {
       Sleep(1);
       return false;  // don't know how to implement which shutter is busy
@@ -674,7 +674,7 @@ namespace MMMAL {
       return DEVICE_OK;
    }
 
-   bool MMMALHub::GetMirrorUnitBusy() const
+   bool MMMALHub::IsMirrorUnitBusy() const
    {
       return cubeBusy_;
    }
@@ -704,7 +704,7 @@ namespace MMMAL {
       return nosepiecePosition_;
    }
 
-   bool MMMALHub::GetNosepieceBusy() const
+   bool MMMALHub::IsNosepieceBusy() const
    {
       return nosepieceBusy_;
    }
@@ -782,12 +782,12 @@ namespace MMMAL {
       return lightPathState_;
    }
 
-   bool MMMALHub::GetLightPathBusy() const
+   bool MMMALHub::IsLightPathBusy() const
    {
       return bottomPortBusy_ || prismBusy_;
    }
 
-   int MMMALHub::SetLightPathPosition(int pos)
+   int MMMALHub::SetLightPathState(int pos)
    {
       MALRESULT malResult;
 
@@ -867,12 +867,12 @@ namespace MMMAL {
       return TranslateMalError(malResult);
    }
 
-   bool MMMALHub::GetLampBusy() const
+   bool MMMALHub::IsLampBusy() const
    {
       return lampBusy_;
    }
 
-   int MMMALHub::SwitchLampVoltage()
+   int MMMALHub::SwitchLampOnOff()
    {
       static ULONG LampVolt = 0;
 
@@ -998,7 +998,7 @@ namespace MMMAL {
       return DEVICE_OK;
    }
 
-   bool MMMALHub::GetFocusDriverBusy() const
+   bool MMMALHub::IsFocusBusy() const
    {
       return focusBusy_;
    }
@@ -1041,7 +1041,7 @@ namespace MMMAL {
       return DEVICE_OK;
    }
 
-   bool MMMALHub::GetAutofocusBusy() const
+   bool MMMALHub::IsAFBusy() const
    {
       return afBusy_;
    }
@@ -1257,7 +1257,7 @@ namespace MMMAL {
             {
                UpdateAFStatus();
             }
-            if (! GetFocusDriverBusy())
+            if (! IsFocusBusy())
             {
                UpdateFocusPosition();
             }
@@ -1284,13 +1284,13 @@ namespace MMMAL {
                }
                break;
             case 2:
-               if (! GetAutofocusBusy())
+               if (! IsAFBusy())
                {
                   SwitchAF();
                }
                break;
             case 1:
-               SwitchLampVoltage();
+               SwitchLampOnOff();
                break;
             case 3:
                GetLampVoltageRange(&min, &max);
