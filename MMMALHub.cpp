@@ -1205,35 +1205,37 @@ namespace MMMAL {
 
    MALRESULT MMMALHub::MALCallback(MAL_MS_MESSAGE msg, long wParam, long lParam, void* pv, void* pCaller)
    {
+      int ret = DEVICE_OK;
+      MALRESULT malResult = MAL_OK;
       switch (wParam)
       {
       case MAL_MS_EVT_CUBEPOSITION: // malSetShutterStatus
          cubeBusy_ = false;
-         UpdateMirrorUnitState();
+         ret = UpdateMirrorUnitState();
          break;
       case MAL_MS_EVT_REVOLVERPOSITION: // malSetShutterStatus
          nosepieceBusy_ = false;
-         UpdateNosepieceState();
+         ret = UpdateNosepieceState();
          break;
       case MAL_MS_EVT_BPORTSTATUS:
          bottomPortBusy_ = false;
-         UpdateLightPathState();
+         ret = UpdateLightPathState();
          break;
       case MAL_MS_EVT_PRISMSTATUS:
          prismBusy_ = false;
-         UpdateLightPathState();
+         ret = UpdateLightPathState();
          break;
       case MAL_MS_EVT_LAMPVOLTAGE:
          lampBusy_=  false;
-         UpdateLampState();
+         ret = UpdateLampState();
          break;
       case MAL_MS_EVT_SAMPLEPOSITION:
          focusBusy_ = false;
-         UpdateFocusPosition();
+         ret = UpdateFocusPosition();
          break;
       case  MAL_MS_EVT_AFSTATUS:
          afBusy_ = false;
-         UpdateAFStatus();
+         ret = UpdateAFStatus();
          break;
       case MAL_MS_EVT_SHUTTERSTATUS:
          break;
@@ -1241,9 +1243,15 @@ namespace MMMAL {
          break;
       }
 
+      if (ret != DEVICE_OK)
+      {
+         LogMessageCode(ret, false);
+      }
+
       if (msg == ME_MS_ERR || msg == ME_MS_COMM_ERR || msg == ME_MS_TXTIMEOUT || msg == ME_MS_RXTIMEOUT)
       {
          const char * source;
+
          switch (wParam)
          {
          case MAL_MS_EVT_CUBEPOSITION:
@@ -1285,11 +1293,11 @@ namespace MMMAL {
          {
             if (autofocusDev_ != NULL)
             {
-               UpdateAFStatus();
+               ret = UpdateAFStatus();
             }
             if (! IsFocusBusy())
             {
-               UpdateFocusPosition();
+               ret = UpdateFocusPosition();
             }
          }
          else 
@@ -1298,6 +1306,7 @@ namespace MMMAL {
          }
       } 
 
+      ret = DEVICE_OK;
       if (wParam == MAL_IX_EVT_NOTICE_SWITCHON)
       {
          ULONG min, max;
@@ -1309,24 +1318,25 @@ namespace MMMAL {
                if (! prismBusy_ )
                {
                   prismBusy_ = true;
-                  malSetPrismStatus(pMAL_, 1, lightPathState_ % 2 == 0 ? MAL_BI : MAL_SIDE);
+                  malResult = malSetPrismStatus(pMAL_, 1, lightPathState_ % 2 == 0 ? MAL_BI : MAL_SIDE);
+                  ret = TranslateMalError(malResult);
                   Sleep(1);
                }
                break;
             case 2:
                if (! IsAFBusy())
                {
-                  SwitchAF();
+                  ret = SwitchAF();
                }
                break;
             case 1:
-               SwitchLampOnOff();
+               ret = SwitchLampOnOff();
                break;
             case 3:
                GetLampVoltageRange(&min, &max);
                if (lampVoltage_ + 500 <= max) //Fixme handle continous press
                {
-                  SetLampVoltage(lampVoltage_ + 500);
+                  ret = SetLampVoltage(lampVoltage_ + 500);
                   Sleep(1);
                }
                break;
@@ -1334,22 +1344,23 @@ namespace MMMAL {
                GetLampVoltageRange(&min, &max);
                if (lampVoltage_ - 500 >= min)
                {
-                  SetLampVoltage(lampVoltage_ - 500);
+                  ret = SetLampVoltage(lampVoltage_ - 500);
                   Sleep(1);
                }
                break;
             case 9:
                fineJogStep_ = ! fineJogStep_;
-               malSetJogStepSize(pMAL_, MAL_MS_JOG1, fineJogStep_ ? -1 : -2);
+               malResult = malSetJogStepSize(pMAL_, MAL_MS_JOG1, fineJogStep_ ? -1 : -2);
+               ret = TranslateMalError(malResult);
                break;
             case 11:
-               EscapeNosepiece();
+               ret = EscapeNosepiece();
                break;
             case 25:
-               SetShutterState(MICROSCOPE_DIA1, ! IsShutterOpen(MICROSCOPE_DIA1));
+               ret = SetShutterState(MICROSCOPE_DIA1, ! IsShutterOpen(MICROSCOPE_DIA1));
                break;
             case 24:
-               SetShutterState(MICROSCOPE_EPI1, ! IsShutterOpen(MICROSCOPE_EPI1));
+               ret = SetShutterState(MICROSCOPE_EPI1, ! IsShutterOpen(MICROSCOPE_EPI1));
                break;
             case 8:
                if (! cubeBusy_)
@@ -1359,7 +1370,7 @@ namespace MMMAL {
                   {
                      pos = (int)(GetMirrorUnitNPositions());
                   }
-                  SetMirrorUnitPosition(pos);
+                  ret = SetMirrorUnitPosition(pos);
                }
                break;
             case 10:
@@ -1370,13 +1381,18 @@ namespace MMMAL {
                   {
                      pos = 1;
                   }
-                  SetMirrorUnitPosition(pos);
+                  ret = SetMirrorUnitPosition(pos);
                }
                break;
             default:
                break;
             }
          }
+      }
+
+      if (ret != DEVICE_OK)
+      {
+         LogMessageCode(ret, false);
       }
 
       return MAL_OK;
