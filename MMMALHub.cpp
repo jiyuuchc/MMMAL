@@ -1377,7 +1377,7 @@ namespace MMMAL {
                if (! cubeBusy_)
                {
                   int pos = GetMirrorUnitPosition() + 1;
-                  if (pos == (int)(GetMirrorUnitNPositions()))
+                  if (pos > (int)(GetMirrorUnitNPositions()))
                   {
                      pos = 1;
                   }
