@@ -238,8 +238,8 @@ namespace MMMAL {
 
       arg[C_TX_BUFFER_SIZE] = 512;
       arg[C_RX_BUFFER_SIZE] = 512;
-      arg[L_TX_TIMEOUT] = 5000000; // 5 sec
-      arg[L_RX_TIMEOUT] = 10000000; // 10 sec
+      arg[L_TX_TIMEOUT] = 10000000; // 10 sec
+      arg[L_RX_TIMEOUT] = 15000000; // 15 sec
       arg[DEVICE_ADDRESS] = 1;
       arg[N_EOS_TYPE] = EOS_CRLF;
       arg[RS232C_BAUDRATE] = 19200;
@@ -1062,7 +1062,7 @@ namespace MMMAL {
          return TranslateMalError(malResult);
       }
 
-      malResult = malSetSampleFarLimit(pMAL_, AXIS_Z, nearLimit);
+      malResult = malSetSampleNearLimit(pMAL_, AXIS_Z, nearLimit);
       if (malResult != MAL_OK) 
       {
          return TranslateMalError(malResult);
