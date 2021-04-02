@@ -25,7 +25,14 @@ namespace MMMAL
       static const char * const Keyword_AFStatus_;
       static const char * const Keyword_ContinuousFocus_;
 
-      MMMALAutofocus();
+	  static const char * const Keyword_AberlensPostion_;
+	  static const char * const Keyword_AFNearLimit_;
+	  static const char * const Keyword_AFFarLimit_;
+	  static const char * const Keyword_OffsetOrigin_;
+	  static const char * const Keyword_OffsetDistance_;
+	  static const char * const Keyword_AutoMovement_;
+
+	  MMMALAutofocus();
       ~MMMALAutofocus();
 
       //API

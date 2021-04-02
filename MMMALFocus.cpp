@@ -15,6 +15,7 @@ namespace MMMAL
    const char * const MMMALFocus::Keyword_Position_ = "Position";
    const char * const MMMALFocus::Keyword_NearLimit_ = "Near Limit";
    const char * const MMMALFocus::Keyword_FarLimit_ = "Far Limit";
+   const char * const MMMALFocus::Keyword_Sensitivity_ = "Sensitivity";
 
    MMMALFocus::MMMALFocus() : initialized_(false), stepSize_(0.001), origin_(0), hub_(NULL)
    {
@@ -98,7 +99,14 @@ namespace MMMAL
          return ret;
       }
 
-      initialized_ = true;
+      pAct = new CPropertyAction (this, &MMMALFocus::OnSensitivity);
+	  ret = CreateProperty(Keyword_Sensitivity_, "0", MM::Integer, false, pAct);
+      if (ret != DEVICE_OK)
+      {
+         return ret;
+      }
+
+	  initialized_ = true;
       return DEVICE_OK;
    }
 
@@ -259,4 +267,33 @@ namespace MMMAL
       return ret;
    }
 
+   int MMMALFocus::OnSensitivity(MM::PropertyBase* pProp, MM::ActionType eAct)
+   {
+	   int ret = DEVICE_OK;
+
+	   if (eAct == MM::BeforeGet)
+	   {
+		   long stepSize;
+		   ret = hub_->GetFocusStepSize(&stepSize);
+		   if (ret != DEVICE_OK) 
+		   {
+			   return ret;
+		   }
+
+		   pProp->Set(stepSize);
+	   }
+	   else if(eAct == MM::AfterSet)
+	   {
+		   long stepSize;
+		   pProp->Get(stepSize);
+
+		   ret = hub_->SetFocusStepSize(stepSize);
+		   if (ret != DEVICE_OK)
+		   {
+			   return ret;
+		   }
+	   }
+
+	   return ret;
+   }
 }

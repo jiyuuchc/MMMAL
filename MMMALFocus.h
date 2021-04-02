@@ -22,6 +22,7 @@ namespace MMMAL
       static const char * const Keyword_Position_;
       static const char * const Keyword_NearLimit_;
       static const char * const Keyword_FarLimit_;
+	  static const char * const Keyword_Sensitivity_;
 
       MMMALFocus();
       ~MMMALFocus();
@@ -45,7 +46,7 @@ namespace MMMAL
       int OnPosition(MM::PropertyBase* pProp, MM::ActionType eAct);
       int OnNearLimit(MM::PropertyBase* pProp, MM::ActionType eAct);
       int OnFarLimit(MM::PropertyBase* pProp, MM::ActionType eAct);
-      // int OnJogsensitivity(MM::PropertyBase* pProp, MM::ActionType eAct);
+      int OnSensitivity(MM::PropertyBase* pProp, MM::ActionType eAct);
 
       int IsStageSequenceable(bool& seq) const;
       bool IsContinuousFocusDrive() const;

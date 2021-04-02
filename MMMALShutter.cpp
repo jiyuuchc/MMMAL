@@ -94,7 +94,7 @@ namespace MMMAL
 
       if (IsCallbackRegistered())
       {
-         ret = GetCoreCallback()->OnStatusChanged(this);
+         // ret = GetCoreCallback()->OnStatusChanged(this);
       }
 
       return ret;

@@ -37,15 +37,15 @@ BOOL APIENTRY DllMain(HANDLE /*hModule*/,  DWORD  ul_reason_for_call, LPVOID /*l
 
 MODULE_API void InitializeModuleData()
 {
-   AddAvailableDeviceName(MMMALHub::DeviceName_, MMMALHub::Description_);
-   AddAvailableDeviceName(MMMALShutter::DeviceNameDIA_, "Olympus IX DIA Shutter");
-   AddAvailableDeviceName(MMMALShutter::DeviceNameEPI_, "Olympus IX EPI Shutter");
-   AddAvailableDeviceName(MMMALMirrorUnit::DeviceName_, MMMALMirrorUnit::Description_);
-   AddAvailableDeviceName(MMMALLightPath::DeviceName_, MMMALLightPath::Description_);
-   AddAvailableDeviceName(MMMALNosepiece::DeviceName_, MMMALNosepiece::Description_);
-   AddAvailableDeviceName(MMMALFocus::DeviceName_, MMMALFocus::Description_);
-   AddAvailableDeviceName(MMMALAutofocus::DeviceName_, MMMALAutofocus::Description_);
-   AddAvailableDeviceName(MMMALLamp::DeviceName_, MMMALLamp::Description_);
+   RegisterDevice(MMMALHub::DeviceName_, MM::HubDevice, MMMALHub::Description_);
+   RegisterDevice(MMMALShutter::DeviceNameDIA_, MM::ShutterDevice, "Olympus IX DIA Shutter");
+   RegisterDevice(MMMALShutter::DeviceNameEPI_, MM::ShutterDevice, "Olympus IX EPI Shutter");
+   RegisterDevice(MMMALMirrorUnit::DeviceName_, MM::StateDevice, MMMALMirrorUnit::Description_);
+   RegisterDevice(MMMALLightPath::DeviceName_, MM::StateDevice, MMMALLightPath::Description_);
+   RegisterDevice(MMMALNosepiece::DeviceName_, MM::StateDevice, MMMALNosepiece::Description_);
+   RegisterDevice(MMMALFocus::DeviceName_, MM::StageDevice, MMMALFocus::Description_);
+   RegisterDevice(MMMALAutofocus::DeviceName_, MM::AutoFocusDevice, MMMALAutofocus::Description_);
+   RegisterDevice(MMMALLamp::DeviceName_, MM::GenericDevice, MMMALLamp::Description_);
 
    // AddAvailableDeviceName(g_IX71Lamp, "IX71 Halogen Lamp");
 }

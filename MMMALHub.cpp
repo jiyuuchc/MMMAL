@@ -1071,6 +1071,30 @@ namespace MMMAL {
       return DEVICE_OK;
    }
 
+   int MMMALHub::GetFocusStepSize(long* stepSize)
+   {
+	   MALRESULT malResult;
+	   
+	   malResult = malGetJogStepSize(pMAL_, MAL_MS_JOG1, stepSize);
+	   if (malResult != MAL_OK)
+	   {
+		   return TranslateMalError(malResult);
+	   }
+	   return DEVICE_OK;
+   }
+
+   int MMMALHub::SetFocusStepSize(long stepSize)
+   {
+	   MALRESULT malResult;
+
+	   malResult = malSetJogStepSize(pMAL_, MAL_MS_JOG1, stepSize);
+	   if (malResult != MAL_OK)
+	   {
+		   return TranslateMalError(malResult);
+	   }
+	   return DEVICE_OK;
+   }
+
    bool MMMALHub::IsAFBusy() const
    {
       return afBusy_;

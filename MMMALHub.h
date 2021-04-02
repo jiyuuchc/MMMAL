@@ -10,7 +10,7 @@
 
 #include <windows.h>
 #include <iostream>
-#include "MAL/include/MalMicroscope.h"
+#include "MalMicroscope.h"
 
 #include "MMDevice.h"
 #include "MMDeviceConstants.h"
@@ -104,6 +104,8 @@ namespace MMMAL {
       bool IsFocusBusy() const;
       int GetFocusLimits(LONGLONG* nearLimit, LONGLONG *farLimit);
       int SetFocusLimits(LONGLONG nearLimit, LONGLONG farLimit);
+	  int GetFocusStepSize(long* stepSize);
+	  int SetFocusStepSize(long stepSize);
       
       bool IsAFBusy() const;
       MAL_MS_AFSTATUS GetAFStatus() const;

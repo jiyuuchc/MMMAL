@@ -16,6 +16,13 @@ namespace MMMAL
    const char * const MMMALAutofocus::Keyword_AFStatus_ = "Status";
    const char * const MMMALAutofocus::Keyword_ContinuousFocus_ ="Continuous Focus";
 
+   const char * const Keyword_AberlensPostion_ = "";
+   const char * const Keyword_AFNearLimit_ = "";
+   const char * const Keyword_AFFarLimit_ = "";
+   const char * const Keyword_OffsetOrigin_ = "";
+   const char * const Keyword_OffsetDistance_ = "";
+   const char * const Keyword_AutoMovement_ = "";
+   
    MMMALAutofocus::MMMALAutofocus() : initialized_(false), hub_(NULL), continuousFocusing_(false)
    {
       InitializeDefaultErrorMessages();
@@ -335,7 +342,7 @@ namespace MMMAL
    {
       int ret = DEVICE_OK;
 
-      if (eAct = MM::BeforeGet)
+      if (eAct == MM::BeforeGet)
       {
          LONGLONG llRange;
          
